@@ -23,10 +23,10 @@
 
  _knowtifyLoader("//js.knowtify.io/knowtify.js");
 
- _knowtify.push(['add_contact', {"email": "joe@a.ol.com", contact_id: 123, name: "Joe", followers: 12}]);
- _knowtify.push(['update_contact', {"contact_id": 123, "email": "joe@aol.com", name: "Joe", followers: 12}]);
- _knowtify.push(['event', 'low_credits',{ "contact_id": 123, credits: 10}]);
- _knowtify.push(['inbox', 'inbox-btn', {"email": "joe@a.ol.com", contact_id: 123}]);
+ _knowtify.push(['add_contact', {"email": "joe@a.ol.com", id: 123, name: "Joe", followers: 12}]);
+ _knowtify.push(['update_contact', {id: 123, "email": "joe@aol.com", name: "Joe", followers: 12}]);
+ _knowtify.push(['event', 'low_credits',{ id: 123, email: "joe@aol.com", credits: 10}]);
+ _knowtify.push(['inbox', 'inbox-btn', {"email": "joe@aol.com", id: 123}]);
 
  */
 (function (window, document, undefined) {
@@ -113,20 +113,31 @@
             updateContactCommand: function (data) {
                 console.log("update_contact");
 
-                if(data[1].id) {
+                if(data[1].id && data[1].email) {
                     KNOWTIFY.apiCall("http://www.knowtify.io/api/v1/contacts/js_update", data[1]);
                 }else{
-                    console.log("Error: No contact id defined for update_contact");
+                  if (data[1].id) {
+                    console.log("Error: No id defined for update_contact");
+                   }
+                  if (data[1].email) {
+                    console.log("Error: No emaile defined for update_contact");
+                   }
                 }
             },
             eventCommand: function (data) {
-                console.log("event");
-                if(data[2].id) {
+                console.log("event",data);
+
+                if(data[2].id && data[2].email) {
                     data[2].event = data[1];
                     KNOWTIFY.apiCall("http://www.knowtify.io/api/v1/contacts/js_update", data[2]);
                 }
                 else {
-                    console.log("Error: No id defined for event", data[1]);
+                  if (data[2].id) {
+                    console.log("Error: No id defined for event");
+                   }
+                  if (data[2].email) {
+                    console.log("Error: No emaile defined for event");
+                   }
                 }
 
             },
