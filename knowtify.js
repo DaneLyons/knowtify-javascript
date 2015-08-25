@@ -203,7 +203,12 @@
                     xhr.setRequestHeader("Content-Type","application/json; charset=UTF-8");
                     xhr.onload = function() {
                         if (xhr.status !== 200) {
-                            alert('Request failed.  Returned status of ' + xhr.status);
+                            if (_knowtify.errorHandler) {
+                              _knowtify.errorHandler(xhr);
+                            }
+                            else {
+                              alert('Request failed.  Returned status of ' + xhr.status);
+                            }
                         }else{
                             if (success_callback){
                                 success_callback(xhr.responseText);
